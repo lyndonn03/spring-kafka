@@ -10,8 +10,8 @@ To run this project:
 You can send a message using the endpoint:
     `localhost:5050/send-message` with json containing:
 
-    ```
+    
     {
         "message": "your message here"
     }
-    ```
+    
