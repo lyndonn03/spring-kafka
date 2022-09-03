@@ -6,3 +6,12 @@ To run this project:
 
 1. clone this repo
 2. use `docker compose up`
+
+You can send a message using the endpoint:
+    `localhost:5050/send-message` with json containing:
+
+    ```
+    {
+        "message": "your message here"
+    }
+    ```
