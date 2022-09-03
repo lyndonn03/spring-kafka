@@ -5,7 +5,7 @@ services:
     image: maven:3.8.6-eclipse-temurin-11-alpine
     working_dir: /usr/src/app
     ports:
-      - 5050:8080
+      - 5050:5050
     networks:
       - myappnet
     volumes:
@@ -22,12 +22,15 @@ services:
     image: maven:3.8.6-eclipse-temurin-11-alpine
     working_dir: /usr/src/app
     ports:
-      - 6060:8080
+      - 6060:6060
     networks:
       - myappnet
     volumes:
       - ./kafka-consumer:/usr/src/app
       - maven-repo:/root/.m2
+    environment:
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT_1=9092
     command: mvn spring-boot:run
     depends_on:
       - kafka

@@ -1,4 +1,4 @@
-package io.lpamintuan.kafkaproducer;
+package io.lpamintuan.kafkaconsumer;
 
 import java.time.LocalDateTime;
 
