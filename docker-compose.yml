@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  kafka-producer:
+    image: maven:3.8.6-eclipse-temurin-11-alpine
+    working_dir: /usr/src/app
+    ports:
+      - 5050:8080
+    networks:
+      - myappnet
+    volumes:
+      - ./kafka-producer:/usr/src/app
+      - maven-repo:/root/.m2
+    command: mvn spring-boot:run
+    depends_on:
+      - kafka
+
+  kafka-consumer:
+    image: maven:3.8.6-eclipse-temurin-11-alpine
+    working_dir: /usr/src/app
+    ports:
+      - 6060:8080
+    networks:
+      - myappnet
+    volumes:
+      - ./kafka-consumer:/usr/src/app
+      - maven-repo:/root/.m2
+    command: mvn spring-boot:run
+    depends_on:
+      - kafka
+      - kafka-producer
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - myappnet
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    networks:
+      - myappnet
+
+
+networks:
+  myappnet:
+    driver: bridge
+
+volumes:
+  maven-repo: {}
